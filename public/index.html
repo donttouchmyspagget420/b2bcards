@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI-карточка товара · КИПиА</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap topbar-inner">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">AI</span>
+          <div>
+            <h1>AI-карточка товара</h1>
+            <p>Черновик для B2B-каталога контрольно-измерительных приборов</p>
+          </div>
+        </div>
+        <a class="health" id="health" href="/api/health" target="_blank" rel="noreferrer">
+          проверяем модель…
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap layout">
+      <section class="panel form-panel" aria-labelledby="form-title">
+        <div class="panel-heading">
+          <div>
+            <h2 id="form-title">Данные товара</h2>
+            <p class="muted">Заполните поля вручную или загрузите пример.</p>
+          </div>
+        </div>
+
+        <div class="samples" aria-label="Примеры товаров">
+          <button type="button" class="sample-btn" data-sample="manotom-dm02.json">
+            Манотомь DM 02
+          </button>
+          <button type="button" class="sample-btn" data-sample="oven-bp14b-d4.4-24.json">
+            ОВЕН БП14Б-Д4.4-24
+          </button>
+        </div>
+
+        <form id="product-form" novalidate>
+          <label class="field">
+            <span>Название товара <b aria-hidden="true">*</b></span>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              maxlength="200"
+              required
+              placeholder="Например, манометр показывающий DM 02"
+              autocomplete="off"
+            />
+          </label>
+
+          <label class="field">
+            <span>Производитель</span>
+            <input
+              id="manufacturer"
+              name="manufacturer"
+              type="text"
+              maxlength="300"
+              placeholder="Например, Манотомь"
+              autocomplete="off"
+            />
+          </label>
+
+          <label class="field">
+            <span>Характеристики</span>
+            <textarea
+              id="specs"
+              name="specs"
+              rows="9"
+              placeholder="диапазон измерений: 0–1,6 МПа&#10;класс точности: 1,5&#10;присоединение: G1/2"
+            ></textarea>
+            <small>По одной паре на строку: <code>параметр: значение</code></small>
+          </label>
+
+          <label class="field">
+            <span>Описание / фрагмент техпаспорта</span>
+            <textarea
+              id="description"
+              name="description"
+              rows="6"
+              maxlength="20000"
+              placeholder="Прибор предназначен для измерения избыточного давления..."
+            ></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="primary" id="submit-btn">
+              <span class="btn-label">Сгенерировать карточку</span>
+              <span class="spinner" hidden aria-hidden="true"></span>
+            </button>
+            <button type="button" class="ghost" id="reset-btn">Очистить</button>
+          </div>
+          <p class="muted small">
+            Технические значения берутся только из введённых данных. Отсутствующие
+            характеристики помечаются как «данных нет».
+          </p>
+        </form>
+      </section>
+
+      <section class="panel result-panel" aria-labelledby="result-title">
+        <div class="panel-heading result-heading">
+          <div>
+            <h2 id="result-title">Результат</h2>
+            <p class="muted" id="result-subtitle">Здесь появится черновик карточки.</p>
+          </div>
+          <div class="result-actions" hidden id="result-actions">
+            <div class="tabs" role="tablist" aria-label="Формат результата">
+              <button type="button" role="tab" aria-selected="true" data-tab="markdown">
+                Markdown
+              </button>
+              <button type="button" role="tab" aria-selected="false" data-tab="json">
+                JSON
+              </button>
+            </div>
+            <button type="button" class="ghost small-btn" id="copy-btn">Копировать</button>
+            <button type="button" class="ghost small-btn" id="download-btn">Скачать</button>
+          </div>
+        </div>
+
+        <div id="error-box" class="error-box" hidden role="alert"></div>
+
+        <div id="empty-state" class="empty-state">
+          <div class="empty-icon" aria-hidden="true">↗</div>
+          <p>Заполните форму и нажмите «Сгенерировать карточку».</p>
+          <p class="muted small">
+            Получится SEO-заголовок, SEO-описание 800–1200 символов, характеристики,
+            3–5 запросов и коммерческий блок.
+          </p>
+        </div>
+
+        <div id="result-content" hidden>
+          <div id="quality" class="quality"></div>
+          <div id="notes" class="notes" hidden></div>
+          <pre id="output" class="output" tabindex="0"></pre>
+          <p class="meta muted small" id="meta"></p>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
